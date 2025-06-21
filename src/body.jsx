@@ -1,12 +1,13 @@
 import React from 'react';
 import ClaudeRecipe from './components/clauderecipe';
 import IngredientList from './components/IngredientsList';
-
+import Spinner from './components/spinner';
 import { getRecipeFromMistral } from './ai';
 
 export default function Main() {
   const [ingredients, setIngredients] = React.useState([]);
   const [recipe, setRecipe] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   const ingredientsMap = ingredients.map((ingredient, index) => (
     <li key={index}>{ingredient}</li>
@@ -17,9 +18,11 @@ export default function Main() {
     setIngredients((prevIng) => [...prevIng, ing]);
   }
   async function getRecipe() {
+    setLoading(true);
     const recipeMarkdown = await getRecipeFromMistral(ingredients);
     console.log(recipeMarkdown);
     setRecipe(recipeMarkdown);
+    setLoading(false);
   }
   return (
     <main>
@@ -36,6 +39,7 @@ export default function Main() {
       {ingredientsMap.length > 0 && (
         <IngredientList ingredientMap={ingredientsMap} getRecipe={getRecipe} />
       )}
+      {loading && <Spinner />}
       {recipe && <ClaudeRecipe recipe={recipe} />}
     </main>
   );

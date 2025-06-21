@@ -134,3 +134,9 @@ ul.ingredients-list > li {
 .suggested-recipe-container ol li {
   margin-bottom: 8px;
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
